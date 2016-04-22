@@ -29,26 +29,28 @@ class ChargeReferralPercents
     /**
      * Charge to referrers 10% of referral's last charged amount.
      * TODO: implement 2nd-lvl for referrers (recursive?)
-     * @param  UserChargedBalance  $event
+     * @param  UserChargedBalance $event
      * @return void
      */
     public function handle(UserChargedBalance $event)
     {
         // check if referrer still exists
         if ($referrer = $this->userRepository->getReferrerById($event->user->id)) {
-            $referrer = User::where('id' , '=' , $referrer->id )->first();
-            // check if referral last charged amount exists
-            $referralLastChargedAmount = 0.00;
-            if ($referralLastChargedAmount = $event->user->payments()->get()->last()) {
+            $referrer = User::where('id', '=', $referrer->id)->first();
+            $referralLastChargedAmount = $event->user->payments()->get()->last() ?: 0;
+
+            if ($referralLastChargedAmount) {
                 $referralLastChargedAmount = $referralLastChargedAmount->amount;
             }
 
             $commission = 0.1 * $referralLastChargedAmount;
+            $referrerTotalAmount = $referrer->payments()->get()->last() ?: $commission;
 
-            // check if referrer total amount exists
-            $referrerTotalAmount = $commission;
-            if ($referrerTotalAmount = $referrer->payments()->get()->last()) {
-                $referrerTotalAmount = (float) $referrerTotalAmount->total_amount + (float) $commission;
+            if (
+                $referrerTotalAmount instanceof \stdClass ||
+                $referrerTotalAmount instanceof \AffiliateProgram\Models\Payment
+            ) {
+                $referrerTotalAmount = (float)$referrerTotalAmount->total_amount + (float)$commission;
             }
 
             // charge to referrer 10% of referral's last charged amount

@@ -47,7 +47,7 @@ class HomeController extends Controller
         $referrer = $this->userRepository->getReferrerById($user->id);
         $referrals = $this->userRepository->gerReferralsById($user->id);
 
-        $payment = $user->payments->last() ?: (object) ['total_amount' => '0.00'];
+        $payment = $user->payments->last() ?: (object)['total_amount' => '0.00'];
 
         return view('home')->with(compact('referrer', 'referrals', 'payment'));
     }
@@ -60,24 +60,23 @@ class HomeController extends Controller
         $response = ['status' => false];
 
         if ($user = Auth::user()) {
-            if ($currentAmount = $user->payments->last()) {
+            $currentAmount = $user->payments()->get()->last() ?: 0;
+            if ($currentAmount) {
                 $currentAmount = $currentAmount->total_amount;
-            } else {
-                $currentAmount = 0.00;
             }
 
             $selectedAmount = Input::get('amount');
-            
             $payment = Payment::create([
-                'total_amount' => $currentAmount + $selectedAmount,
+                'total_amount' => (float)$currentAmount + (float)$selectedAmount,
                 'amount' => $selectedAmount,
                 'user_id' => $user->id
             ]);
 
-            // Trigger UserChargedBalance-Event to update referral percents for Referrer (parent) User
+            // update commission for referrers
             Event::fire(new UserChargedBalance($user));
 
-            $response = ['status' => true, 'total_amount' => $payment->total_amount];
+            setlocale(LC_MONETARY, 'en_US');
+            $response = ['status' => true, 'total_amount' => money_format('%i', $payment->total_amount)];
         }
 
         return response()->json($response);
