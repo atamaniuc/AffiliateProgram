@@ -37,25 +37,22 @@ class ChargeReferralPercents
         // check if referrer still exists
         if ($referrer = $this->userRepository->getReferrerById($event->user->id)) {
             $referrer = User::where('id' , '=' , $referrer->id )->first();
+            $referralLastChargedAmount = 0.00;
             // check if referral last charged amount exists
-            // TODO: $event->user->payments return empty collection, rewrite to repository !
-            if ($referralLastChargedAmount = $event->user->payments->last()) {
+            if ($referralLastChargedAmount = $event->user->payments()->get()->last()) {
                 $referralLastChargedAmount = $referralLastChargedAmount->amount;
-            } else {
-                $referralLastChargedAmount = 0.00;
             }
 
             $commission = 0.1 * $referralLastChargedAmount;
 
             // check if referrer total amount exists
-            if ($referrerTotalAmount = $referrer->payments->last()) {
-                $referrerTotalAmount = $referrerTotalAmount->total_amount;
+            if ($referrerTotalAmount = $referrer->payments()->get()->last()) {
+                $referrerTotalAmount = (float) $referrerTotalAmount->total_amount + (float) $commission;
             } else {
                 $referrerTotalAmount = $commission;
             }
 
             // charge to referrer 10% of referral's last charged amount
-            // TODO: find a way to check if referrer's last payment didn't changed
             $payment = Payment::create([
                 'total_amount' => $referrerTotalAmount,
                 'amount' => $commission,
