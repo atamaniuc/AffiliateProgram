@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
                     'password' => bcrypt('secret'),
                     'created_at' => $faker->dateTimeThisMonth,
                     'updated_at' => $faker->dateTimeThisMonth,
-                    'amount' => 10.23
+                    //'amount' => 10.23
                 ]);
             }
             
