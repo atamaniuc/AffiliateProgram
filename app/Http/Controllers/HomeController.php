@@ -10,6 +10,7 @@ use Auth;
 use Illuminate\Support\Facades\Input;
 use URL;
 use AffiliateProgram\Models\User;
+use AffiliateProgram\Models\Payment;
 use AffiliateProgram\Repositories\UserRepositoryEloquent;
 
 /**
@@ -21,42 +22,34 @@ class HomeController extends Controller
     /**
      * @var UserRepositoryEloquent
      */
-    protected $repository;
+    protected $userRepository;
 
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param UserRepositoryEloquent $userRepository
      */
-    public function __construct(UserRepositoryEloquent $repository)
+    public function __construct(UserRepositoryEloquent $userRepository)
     {
         $this->middleware('auth');
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
     /**
-     * Show the application dashboard.
+     * Render User profile.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        // $users = $this->repository->all();
-
         $user = Auth::user();
 
-        $referrer = $user->referrer($user->id);
-        $referrals = $user->referrals($user->id);
+        $referrer = $this->userRepository->getReferrerById($user->id);
+        $referrals = $this->userRepository->gerReferralsById($user->id);
 
-       /* $referrerSql = $referrer->getBaseQuery()->toSql();
-        $referralsSql = $referrals->getBaseQuery()->toSql();
-        
-        $referrerResults = $referrer->getResults();
-        $referralsResults = $referrals->getResults();*/
+        $payment = $user->payments->last() ?: (object) ['total_amount' => '0.00'];
 
-       // $referrals->simplePaginate(6);
-        
-        return view('home')->with(compact('referrer', 'referrals'));
+        return view('home')->with(compact('referrer', 'referrals', 'payment'));
     }
 
     /**
@@ -67,19 +60,27 @@ class HomeController extends Controller
         $response = ['status' => false];
 
         if ($user = Auth::user()) {
-            $currentAmount = $user->amount;
+            if ($currentAmount = $user->payments->last()) {
+                $currentAmount = $currentAmount->total_amount;
+            } else {
+                $currentAmount = 0.00;
+            }
+
             $selectedAmount = Input::get('amount');
             
-            $user->setAttribute('amount', $currentAmount + $selectedAmount);
-            $user->save();
+            $payment = Payment::create([
+                'total_amount' => $currentAmount + $selectedAmount,
+                'amount' => $selectedAmount,
+                'user_id' => $user->id
+            ]);
 
             // Trigger UserChargedBalance-Event to update referral percents for Referrer (parent) User
             Event::fire(new UserChargedBalance($user));
 
-            $response = ['status' => true];
+            $response = ['status' => true, 'total_amount' => $payment->total_amount];
         }
 
-        echo json_encode($response);
+        return response()->json($response);
     }
 
 }

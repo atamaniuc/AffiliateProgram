@@ -29,7 +29,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var string
      */
     protected $table = 'users';
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -56,50 +56,33 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $dates = ['deleted_at'];
 
     /**
-     * @hasMany
-     * @param $id
-     * @return array|static[]
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function referrals($id)
+    public function referrals()
     {
-       // return $this->hasMany('AffiliateProgram\Referrals', 'referrer_id', 'id');
-
-        return DB::table('users')
-            ->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
-            ->select('users.*')
-            ->where('referrals.referrer_id',$id)
-            ->get();
-
-       // return $this->hasManyThrough('AffiliateProgram\User', 'AffiliateProgram\Referrals', 'referrer_id', 'user_id', 'user_id');
-
-
-       // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'referrer_id', 'id');
-       // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'id', 'referrer_id', 'referral_id');
-
-      //  return $this->hasManyThrough('AffiliateProgram\User', 'AffiliateProgram\Referrals', 'id', 'referrer_id', 'id');
+        // return $this->hasMany('AffiliateProgram\Referrals', 'referrer_id', 'id');
+        // return $this->hasManyThrough('AffiliateProgram\User', 'AffiliateProgram\Referrals', 'referrer_id', 'user_id', 'user_id');
+        // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'referrer_id', 'id');
+        // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'id', 'referrer_id', 'referral_id');
+        // return $this->hasManyThrough('AffiliateProgram\User', 'AffiliateProgram\Referrals', 'id', 'referrer_id', 'id');
     }
 
     /**
-     * @hasOne
-     * @param $id
-     * @return mixed|static
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-   public function referrer($id)
+    public function referrer()
     {
-        return DB::table('users')
-            ->where('id', function ($query) use ($id) {
-                $query
-                    ->select('referrer_id')
-                    ->from('referrals')
-                    ->whereRaw('referrals.referral_id =' . $id);
-            })
-            ->first();
-        
+        // return $this->hasOne('AffiliateProgram\Referrals', 'referral_id', 'id');
+        // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'referral_id',null, 'id');
+        // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'referral_id', 'id');
+    }
 
-       // return $this->hasOne('AffiliateProgram\Referrals', 'referral_id', 'id');
-
-        //return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'referral_id',null, 'id');
-       // return $this->hasManyThrough($this, 'AffiliateProgram\Referrals', 'referral_id', 'id');
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany('AffiliateProgram\Models\Payment', 'user_id');
     }
 
 

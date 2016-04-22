@@ -40,7 +40,7 @@
                         <hr>
                         <h4>
                             Balance:
-                            <code class="currentAmount" data-amount="{{ Auth::user()->amount }}">{{ Auth::user()->amount }}</code>
+                            <code class="currentAmount" data-amount="{{ $payment->total_amount}}">{{ $payment->total_amount }}</code>
                             <code>$</code>
                             <a role="button" class="btn btn-info" data-toggle="modal" data-target="#amountCharger">Charge</a>
                         </h4>

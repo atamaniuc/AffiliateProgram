@@ -20,11 +20,8 @@ function chargeBalance() {
                 '_token': $('input[name=_token]').val()
             }
         }).done(function(data) {
-            var response = JSON.parse(data);
-
-            if (response.status) {
-                var zeroString = currentAmount.indexOf('.') > -1 ? '.00' : '';
-                $amountPlaceholder.html(parseFloat(currentAmount) + parseFloat(selectedAmount) + zeroString);
+            if (data['status']) {
+                $amountPlaceholder.html(data['total_amount']);
                 $amountCharger.modal('hide');
             }
         });

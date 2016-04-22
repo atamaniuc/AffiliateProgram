@@ -61,20 +61,5 @@ class Referral extends Model
         return $this->belongsTo('AffiliateProgram\Models\User');
     }*/
 
-    /**
-     * @param $referrerId
-     * @param $referralId
-     * @return bool
-     */
-    public static function insertRelation($referrerId, $referralId)
-    {
-        // TODO: timestamps
-        return DB::table('referrals')->insert(
-            array(
-                'referrer_id'     =>   $referrerId,
-                'referral_id'   =>   $referralId
-            )
-        );
-    }
 
 }

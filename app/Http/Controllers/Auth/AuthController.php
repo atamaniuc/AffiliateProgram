@@ -2,12 +2,11 @@
 
 namespace AffiliateProgram\Http\Controllers\Auth;
 
-use AffiliateProgram\Referrals;
-use AffiliateProgram\User;
+use AffiliateProgram\Repositories\ReferralRepositoryEloquent;
+use AffiliateProgram\Models\User;
 use AffiliateProgram\Http\Requests;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use Route;
 use Validator;
 use AffiliateProgram\Http\Controllers\Controller;
@@ -32,6 +31,11 @@ class AuthController extends Controller
     }
 
     /**
+     * @var ReferralRepositoryEloquent
+     */
+    protected $referralRepository;
+
+    /**
      * Where to redirect users after login / registration.
      *
      * @var string
@@ -39,13 +43,13 @@ class AuthController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
+     * AuthController constructor. Create a new authentication controller instance.
+     * @param ReferralRepositoryEloquent $referralRepository
      */
-    public function __construct()
+    public function __construct(ReferralRepositoryEloquent $referralRepository)
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->referralRepository = $referralRepository;
     }
 
     /**
@@ -84,51 +88,23 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request, $r = '')
+    public function register(Request $request)
     {
-        $referrer_id = $request->get('referrer_id');
-        //$referrer_id2 = Input::get('referrer_id');
-        //$inputs = $request->all();
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
+            $this->throwValidationException($request, $validator);
         }
 
+        $referrerId = \Crypt::decrypt($request->get('referrer_id'));
         $user = $this->create($request->all());
 
-        $referrerId = \Crypt::decrypt($referrer_id);
-
         // TODO: check if Referrer still exists !
-
-        Referrals::insertRelation($referrerId, $user->id);
+        $this->referralRepository->insert($referrerId, $user->id);
 
         Auth::guard($this->getGuard())->login($user);
 
         return redirect($this->redirectPath());
     }
 
-    /*public function getRegister($key = 'zz')
-    {
-        return view('auth.register')
-            ->with('key', $key);
-    }*/
-
-    /*public function postRegister(Request $request)
-    {
-        $validator = $this->validator($request->all());
-        $redirect = $this->register($request);
-        $referrer_id = $request->get('referrer_id');
-        $referrer_id2 = Input::get('referrer_id');
-        $inputs = $request->all();
-
-        $user = $request->user();
-
-
-
-
-        return $redirect;
-    }*/
 }
