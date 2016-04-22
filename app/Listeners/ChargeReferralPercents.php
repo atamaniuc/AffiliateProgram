@@ -27,8 +27,8 @@ class ChargeReferralPercents
     }
 
     /**
-     * Handle the event.
-     *
+     * Charge to referrers 10% of referral's last charged amount.
+     * TODO: implement 2nd-lvl for referrers (recursive?)
      * @param  UserChargedBalance  $event
      * @return void
      */
@@ -37,8 +37,8 @@ class ChargeReferralPercents
         // check if referrer still exists
         if ($referrer = $this->userRepository->getReferrerById($event->user->id)) {
             $referrer = User::where('id' , '=' , $referrer->id )->first();
-            $referralLastChargedAmount = 0.00;
             // check if referral last charged amount exists
+            $referralLastChargedAmount = 0.00;
             if ($referralLastChargedAmount = $event->user->payments()->get()->last()) {
                 $referralLastChargedAmount = $referralLastChargedAmount->amount;
             }
@@ -46,10 +46,9 @@ class ChargeReferralPercents
             $commission = 0.1 * $referralLastChargedAmount;
 
             // check if referrer total amount exists
+            $referrerTotalAmount = $commission;
             if ($referrerTotalAmount = $referrer->payments()->get()->last()) {
                 $referrerTotalAmount = (float) $referrerTotalAmount->total_amount + (float) $commission;
-            } else {
-                $referrerTotalAmount = $commission;
             }
 
             // charge to referrer 10% of referral's last charged amount
@@ -60,4 +59,5 @@ class ChargeReferralPercents
             ]);
         }
     }
+
 }
