@@ -10,6 +10,7 @@ use Auth;
 use Illuminate\Support\Facades\Input;
 use URL;
 use AffiliateProgram\Models\User;
+use AffiliateProgram\Repositories\UserRepositoryEloquent;
 
 /**
  * Class HomeController
@@ -18,13 +19,19 @@ use AffiliateProgram\Models\User;
 class HomeController extends Controller
 {
     /**
+     * @var UserRepositoryEloquent
+     */
+    protected $repository;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepositoryEloquent $repository)
     {
         $this->middleware('auth');
+        $this->repository = $repository;
     }
 
     /**
@@ -34,6 +41,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // $users = $this->repository->all();
+
         $user = Auth::user();
 
         $referrer = $user->referrer($user->id);

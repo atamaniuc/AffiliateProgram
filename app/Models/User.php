@@ -5,6 +5,8 @@ namespace AffiliateProgram\Models;
 use Illuminate\Foundation\Auth;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -17,9 +19,9 @@ use DB;
  * Class User
  * @package AffiliateProgram\Models
  */
-class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, Transformable
 {
-    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes;
+    use Authenticatable, Authorizable, CanResetPassword, SoftDeletes, TransformableTrait;
 
     /**
      * The database table used by the model.

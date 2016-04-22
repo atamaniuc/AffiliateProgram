@@ -11,7 +11,9 @@
         "appzcoder/crud-generator": "^1.0",
         "laravelcollective/html": "^5.2",
         "doctrine/dbal": "^2.5",
-        "barryvdh/laravel-debugbar": "^2.2"
+        "barryvdh/laravel-debugbar": "^2.2",
+        "prettus/l5-repository": "^2.5",
+        "spatie/laravel-fractal": "^1.9"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
