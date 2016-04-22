@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'AffiliateProgram\Events\SomeEvent' => [
-            'AffiliateProgram\Listeners\EventListener',
+        'AffiliateProgram\Events\UserChargedBalance' => [
+            'AffiliateProgram\Listeners\ChargeReferralPercents',
         ],
     ];
 

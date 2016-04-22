@@ -63,10 +63,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
        // return $this->hasMany('AffiliateProgram\Referrals', 'referrer_id', 'id');
 
         return DB::table('users')
-        ->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
-        ->select('users.*')
-        ->where('referrals.referrer_id',$id)
-        ->get();
+            ->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
+            ->select('users.*')
+            ->where('referrals.referrer_id',$id)
+            ->get();
 
        // return $this->hasManyThrough('AffiliateProgram\User', 'AffiliateProgram\Referrals', 'referrer_id', 'user_id', 'user_id');
 

@@ -2,6 +2,8 @@
 
 namespace AffiliateProgram\Http\Controllers;
 
+use Event;
+use AffiliateProgram\Events\UserChargedBalance;
 use AffiliateProgram\Http\Requests;
 use Illuminate\Http\Request;
 use Auth;
@@ -34,10 +36,6 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        #$failPlease = User::findOrFail(0);
-        #$u = new User();
-
-
         $referrer = $user->referrer($user->id);
         $referrals = $user->referrals($user->id);
 
@@ -65,6 +63,9 @@ class HomeController extends Controller
             
             $user->setAttribute('amount', $currentAmount + $selectedAmount);
             $user->save();
+
+            // Trigger UserChargedBalance-Event to update referral percents for Referrer (parent) User
+            Event::fire(new UserChargedBalance($user));
 
             $response = ['status' => true];
         }
