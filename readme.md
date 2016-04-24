@@ -24,3 +24,5 @@ password: secret
 2. Use UUID instead of incremental ID (was problems with user auth).
 3. Implement User Roles.
 4. Refactor DB to use Nested Sets for getting many referrers.
+5. Set up cache for Eloquent.
+6. Use Gulp for frontend.
