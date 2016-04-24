@@ -18,8 +18,8 @@ class CreateReferralsTable extends Migration
             $table->integer('referrer_id')->unsigned();
             $table->integer('referral_id')->unsigned();
 
-            $table->foreign('referrer_id')->references('id')->on('users');
-            $table->foreign('referral_id')->references('id')->on('users');
+            $table->foreign('referrer_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('referral_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

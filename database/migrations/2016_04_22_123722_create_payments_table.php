@@ -18,7 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->decimal('amount', 12, 2);
             
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamp('added_at');
         });

@@ -8,7 +8,6 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use AffiliateProgram\Contracts\Repositories\UserRepository;
 use AffiliateProgram\Models\User;
 use AffiliateProgram\Validators\UserValidator;
-#use DB;
 
 /**
  * Class UserRepositoryEloquent
@@ -42,13 +41,14 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     public function getReferrerByReferralId($id)
     {
         $this->applyCriteria();
-        $model = $this->model->where('id', function ($query) use ($id) {
-            $query
-                ->select('referrer_id')
-                ->from('referrals')
-                ->whereRaw('referrals.referral_id =' . $id);
-        })
-        ->first();
+        $model = $this->model
+            ->where('id', function ($query) use ($id) {
+                $query
+                    ->select('referrer_id')
+                    ->from('referrals')
+                    ->whereRaw('referrals.referral_id =' . $id);
+            })
+            ->first();
 
         $this->resetModel();
 
@@ -63,7 +63,8 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     public function gerReferralsByReferrerId($id)
     {
         $this->applyCriteria();
-        $model = $this->model->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
+        $model = $this->model
+            ->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
             ->select('users.*')
             ->where('referrals.referrer_id', $id)
             ->get();
