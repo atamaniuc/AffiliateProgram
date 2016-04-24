@@ -27,35 +27,47 @@ class ChargeReferralPercents
     }
 
     /**
-     * Charge to referrers 10% of referral's last charged amount.
-     * TODO: implement 2nd-lvl for referrers (recursive?)
-     * @param  UserChargedBalance $event
-     * @return void
+     * @param UserChargedBalance $event
      */
     public function handle(UserChargedBalance $event)
     {
-        // check if referrer still exists
+        // check if 1st-level referrer still exists
         if ($referrer = $this->userRepository->getReferrerByReferralId($event->user->id)) {
-            $referralLastChargedAmount = $event->user->payments()->get()->last() ?: 0;
-
-            if ($referralLastChargedAmount) {
-                $referralLastChargedAmount = $referralLastChargedAmount->amount;
+            $this->addReferralInterest($referrer, $event->user);
+            // check if 2st-level referrer still exists
+            if ($parentReferrer = $this->userRepository->getReferrerByReferralId($referrer->id)) {
+                $this->addReferralInterest($parentReferrer, $referrer);
             }
-
-            $commission = 0.1 * $referralLastChargedAmount;
-            $referrerTotalAmount = $referrer->payments()->get()->last() ?: $commission;
-
-            if ($referrerTotalAmount instanceof \AffiliateProgram\Models\Payment) { // || $referrerTotalAmount instanceof \stdClass)
-                $referrerTotalAmount = (float)$referrerTotalAmount->total_amount + (float)$commission;
-            }
-
-            // charge to referrer 10% of referral's last charged amount
-            $payment = Payment::create([
-                'total_amount' => $referrerTotalAmount,
-                'amount' => $commission,
-                'user_id' => $referrer->id
-            ]);
         }
     }
+
+    /**
+     * Add 10% to Referrer of Referral's last charged amount
+     *
+     * @param User $referrer
+     * @param User $referral
+     */
+    private function addReferralInterest(User $referrer, User $referral)
+    {
+        $referralLastChargedAmount = $referral->payments()->get()->last() ?: 0;
+
+        if ($referralLastChargedAmount) {
+            $referralLastChargedAmount = $referralLastChargedAmount->amount;
+        }
+
+        $commission = 0.1 * $referralLastChargedAmount;
+        $referrerTotalAmount = $referrer->payments()->get()->last() ?: $commission;
+
+        if ($referrerTotalAmount instanceof \AffiliateProgram\Models\Payment) {
+            $referrerTotalAmount = (float)$referrerTotalAmount->total_amount + (float)$commission;
+        }
+        // charge to referrer 10% of referral's last charged amount
+        Payment::create([
+            'total_amount' => $referrerTotalAmount,
+            'amount' => $commission,
+            'user_id' => $referrer->id
+        ]);
+    }
+
 
 }
