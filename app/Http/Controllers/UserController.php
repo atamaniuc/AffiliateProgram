@@ -47,9 +47,9 @@ class UserController extends Controller
         $referrer = $this->userRepository->getReferrerByReferralId($user->id);
         $referrals = $this->userRepository->gerReferralsByReferrerId($user->id);
 
-        $payment = $user->payments->last() ?: (object)['total_amount' => '0.00'];
+        $payment = $user->payments()->get()->last() ?: (object)['total_amount' => '0.00'];
 
-        return view('home')->with(compact('referrer', 'referrals', 'payment'));
+        return view('profile')->with(compact('referrer', 'referrals', 'payment'));
     }
 
     /**

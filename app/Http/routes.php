@@ -20,26 +20,3 @@ Route::auth();
 Route::get('/profile', 'UserController@renderProfile');
 Route::post('/chargeAmount', 'UserController@chargeAmount');
 Route::resource('admin/users', 'UsersController'); // ADMIN PANEL
-
-/*Route::get('/register', 'AuthController@register');
-Route::post('register/{referrer_id}', 'Auth\AuthController@register');*/
-
-// Registration Routes...
-/*Route::get('register', 'Auth\AuthController@showRegistrationForm');
-Route::post('register/{referrer_id}', 'Auth\AuthController@register');*/
-/*Route::post('register/{referrer_id}', [
-    'as' => 'register/{referrer_id}', 'uses' => 'Auth\AuthController@register'
-]);*/
-
-
-
-
-
-#Route::post('register/{referrer_id}', 'Auth\AuthController@postRegister');
-
-
-
-
-
-/*Route::post('register/{referrer_id}', 'Auth\AuthController@register');
-Route::get('register/{referrer_id}', ['as' => 'register', 'uses' => 'Auth\AuthController@register']);*/

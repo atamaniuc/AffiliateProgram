@@ -6,7 +6,7 @@ use AffiliateProgram\Events\UserChargedBalance;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use AffiliateProgram\Repositories\UserRepositoryEloquent;
-use AffiliateProgram\Models\Payment;
+use AffiliateProgram\Models\Payment as Payment;
 use AffiliateProgram\Models\User;
 
 class ChargeReferralPercents
@@ -58,7 +58,7 @@ class ChargeReferralPercents
         $commission = 0.1 * $referralLastChargedAmount;
         $referrerTotalAmount = $referrer->payments()->get()->last() ?: $commission;
 
-        if ($referrerTotalAmount instanceof \AffiliateProgram\Models\Payment) {
+        if ($referrerTotalAmount instanceof Payment) {
             $referrerTotalAmount = (float)$referrerTotalAmount->total_amount + (float)$commission;
         }
         // charge to referrer 10% of referral's last charged amount

@@ -3,11 +3,12 @@
 namespace AffiliateProgram\Events;
 
 use AffiliateProgram\Events\Event;
+use AffiliateProgram\Models\Payment;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use AffiliateProgram\Models\User;
 
-class UserChargedBalance extends Event
+class UserChargedBalance extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 
@@ -17,6 +18,11 @@ class UserChargedBalance extends Event
     public $user;
 
     /**
+     * @var Payment $payment
+     */
+    public $payment;
+
+    /**
      * Create a new event instance.
      *
      * @param User $user
@@ -24,6 +30,7 @@ class UserChargedBalance extends Event
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->payment = $user->payments()->get()->last();
     }
 
     /**
@@ -33,6 +40,6 @@ class UserChargedBalance extends Event
      */
     public function broadcastOn()
     {
-        return [];
+        return ['UserChargedBalance'];
     }
 }
