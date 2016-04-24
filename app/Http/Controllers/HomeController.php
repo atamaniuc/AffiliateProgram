@@ -44,8 +44,8 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        $referrer = $this->userRepository->getReferrerById($user->id);
-        $referrals = $this->userRepository->gerReferralsById($user->id);
+        $referrer = $this->userRepository->getReferrerByReferralId($user->id);
+        $referrals = $this->userRepository->gerReferralsByReferrerId($user->id);
 
         $payment = $user->payments->last() ?: (object)['total_amount' => '0.00'];
 

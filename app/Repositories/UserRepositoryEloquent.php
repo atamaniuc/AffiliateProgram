@@ -2,12 +2,13 @@
 
 namespace AffiliateProgram\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use AffiliateProgram\Contracts\Repositories\UserRepository;
 use AffiliateProgram\Models\User;
 use AffiliateProgram\Validators\UserValidator;
-use DB;
+#use DB;
 
 /**
  * Class UserRepositoryEloquent
@@ -34,34 +35,42 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     }
 
     /**
-     * TODO: find a way to return User instead of stdClass
      * @param $id
-     * @return mixed|static
+     * 
+     * @return User
      */
-    public function getReferrerById($id)
+    public function getReferrerByReferralId($id)
     {
-       return DB::table('users')
-            ->where('id', function ($query) use ($id) {
-                $query
-                    ->select('referrer_id')
-                    ->from('referrals')
-                    ->whereRaw('referrals.referral_id =' . $id);
-            })
-            ->first();
+        $this->applyCriteria();
+        $model = $this->model->where('id', function ($query) use ($id) {
+            $query
+                ->select('referrer_id')
+                ->from('referrals')
+                ->whereRaw('referrals.referral_id =' . $id);
+        })
+        ->first();
+
+        $this->resetModel();
+
+        return $this->parserResult($model);
     }
 
     /**
-     * TODO: find a way to return User instead of stdClass
      * @param $id
-     * @return array|static[]
+     * 
+     * @return Collection
      */
-    public function gerReferralsById($id)
+    public function gerReferralsByReferrerId($id)
     {
-        return DB::table('users')
-            ->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
+        $this->applyCriteria();
+        $model = $this->model->leftJoin('referrals', 'users.id', '=', 'referrals.referral_id')
             ->select('users.*')
             ->where('referrals.referrer_id', $id)
             ->get();
+
+        $this->resetModel();
+
+        return $this->parserResult($model);
     }
 
 }

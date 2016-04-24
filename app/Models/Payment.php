@@ -19,6 +19,14 @@ use DB;
  * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Payment whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Payment whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property float $total_amount
+ * @property float $amount
+ * @property integer $user_id
+ * @property string $added_at
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Payment whereTotalAmount($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Payment whereAmount($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Payment whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Payment whereAddedAt($value)
  */
 class Payment extends Model
 {

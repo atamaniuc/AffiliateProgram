@@ -17,7 +17,26 @@ use DB;
 
 /**
  * Class User
+ *
  * @package AffiliateProgram\Models
+ * @property integer $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\AffiliateProgram\Models\Payment[] $payments
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User wherePassword($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\User whereDeletedAt($value)
+ * @mixin \Eloquent
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, Transformable
 {

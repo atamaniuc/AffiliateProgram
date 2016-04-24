@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.30 on 2016-04-22.
+ * Generated for Laravel 5.2.30 on 2016-04-24.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -12247,6 +12247,167 @@ namespace {
         public static function offsetUnset($key){
             //Method inherited from \DebugBar\DebugBar            
             return \Barryvdh\Debugbar\LaravelDebugbar::offsetUnset($key);
+        }
+        
+    }
+
+
+    class Fractal extends \Spatie\Fractal\FractalFacade{
+        
+        /**
+         * Set the collection data that must be transformed.
+         *
+         * @param mixed $data
+         * @param \League\Fractal\TransformerAbstract|callable|null $transformer
+         * @param string|null $resourceName
+         * @return $this 
+         * @static 
+         */
+        public static function collection($data, $transformer = null, $resourceName = null){
+            return \Spatie\Fractal\Fractal::collection($data, $transformer, $resourceName);
+        }
+        
+        /**
+         * Set the item data that must be transformed.
+         *
+         * @param mixed $data
+         * @param \League\Fractal\TransformerAbstract|callable|null $transformer
+         * @param string|null $resourceName
+         * @return $this 
+         * @static 
+         */
+        public static function item($data, $transformer = null, $resourceName = null){
+            return \Spatie\Fractal\Fractal::item($data, $transformer, $resourceName);
+        }
+        
+        /**
+         * Set the class or function that will perform the transform.
+         *
+         * @param \League\Fractal\TransformerAbstract|callable $transformer
+         * @return $this 
+         * @static 
+         */
+        public static function transformWith($transformer){
+            return \Spatie\Fractal\Fractal::transformWith($transformer);
+        }
+        
+        /**
+         * Set a Fractal paginator for the data.
+         *
+         * @param \League\Fractal\Pagination\PaginatorInterface $paginator
+         * @return $this 
+         * @static 
+         */
+        public static function paginateWith($paginator){
+            return \Spatie\Fractal\Fractal::paginateWith($paginator);
+        }
+        
+        /**
+         * Set a Fractal cursor for the data.
+         *
+         * @param \Spatie\Fractal\League\Fractal\Pagination\CursorInterface $cursor
+         * @return $this 
+         * @static 
+         */
+        public static function withCursor($cursor){
+            return \Spatie\Fractal\Fractal::withCursor($cursor);
+        }
+        
+        /**
+         * Specify the includes.
+         *
+         * @param array|string $includes Array or csv string of resources to include
+         * @return $this 
+         * @static 
+         */
+        public static function parseIncludes($includes){
+            return \Spatie\Fractal\Fractal::parseIncludes($includes);
+        }
+        
+        /**
+         * Set the serializer to be used.
+         *
+         * @param \League\Fractal\Serializer\SerializerAbstract $serializer
+         * @return $this 
+         * @static 
+         */
+        public static function serializeWith($serializer){
+            return \Spatie\Fractal\Fractal::serializeWith($serializer);
+        }
+        
+        /**
+         * Set the meta data.
+         *
+         * @param $array,...
+         * @return $this 
+         * @static 
+         */
+        public static function addMeta(){
+            return \Spatie\Fractal\Fractal::addMeta();
+        }
+        
+        /**
+         * Set the resource name, to replace 'data' as the root of the collection or item.
+         *
+         * @param string $resourceName
+         * @return $this 
+         * @static 
+         */
+        public static function resourceName($resourceName){
+            return \Spatie\Fractal\Fractal::resourceName($resourceName);
+        }
+        
+        /**
+         * Perform the transformation to json.
+         *
+         * @return string 
+         * @static 
+         */
+        public static function toJson(){
+            return \Spatie\Fractal\Fractal::toJson();
+        }
+        
+        /**
+         * Perform the transformation to array.
+         *
+         * @return array 
+         * @static 
+         */
+        public static function toArray(){
+            return \Spatie\Fractal\Fractal::toArray();
+        }
+        
+        /**
+         * Create fractal data.
+         *
+         * @return \League\Fractal\Scope 
+         * @throws \Spatie\Fractal\Exceptions\InvalidTransformation
+         * @throws \Spatie\Fractal\Exceptions\NoTransformerSpecified
+         * @static 
+         */
+        public static function createData(){
+            return \Spatie\Fractal\Fractal::createData();
+        }
+        
+        /**
+         * Get the resource.
+         *
+         * @return \League\Fractal\Resource\ResourceInterface 
+         * @throws \Spatie\Fractal\Exceptions\InvalidTransformation
+         * @static 
+         */
+        public static function getResource(){
+            return \Spatie\Fractal\Fractal::getResource();
+        }
+        
+        /**
+         * Convert the object into something JSON serializable.
+         *
+         * @return array 
+         * @static 
+         */
+        public static function jsonSerialize(){
+            return \Spatie\Fractal\Fractal::jsonSerialize();
         }
         
     }

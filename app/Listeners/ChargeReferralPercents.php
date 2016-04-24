@@ -35,8 +35,7 @@ class ChargeReferralPercents
     public function handle(UserChargedBalance $event)
     {
         // check if referrer still exists
-        if ($referrer = $this->userRepository->getReferrerById($event->user->id)) {
-            $referrer = User::where('id', '=', $referrer->id)->first();
+        if ($referrer = $this->userRepository->getReferrerByReferralId($event->user->id)) {
             $referralLastChargedAmount = $event->user->payments()->get()->last() ?: 0;
 
             if ($referralLastChargedAmount) {
@@ -46,10 +45,7 @@ class ChargeReferralPercents
             $commission = 0.1 * $referralLastChargedAmount;
             $referrerTotalAmount = $referrer->payments()->get()->last() ?: $commission;
 
-            if (
-                $referrerTotalAmount instanceof \stdClass ||
-                $referrerTotalAmount instanceof \AffiliateProgram\Models\Payment
-            ) {
+            if ($referrerTotalAmount instanceof \AffiliateProgram\Models\Payment) { // || $referrerTotalAmount instanceof \stdClass)
                 $referrerTotalAmount = (float)$referrerTotalAmount->total_amount + (float)$commission;
             }
 
