@@ -83,4 +83,21 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * Get Total Amount. Need for Long Polling Fallback.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTotalAmount()
+    {
+        $response = ['status' => false];
+
+        if ($user = Auth::user()) {
+            $payment = $user->payments()->get()->last() ?: 0;
+            setlocale(LC_MONETARY, 'en_US');
+            $response = ['status' => true, 'total_amount' => money_format('%i', $payment->total_amount)];
+        }
+        return response()->json($response);
+    }
+
 }

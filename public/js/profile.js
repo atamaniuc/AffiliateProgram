@@ -31,6 +31,8 @@ function chargeBalance() {
 function updateBalance(balance) {
     $('.currentAmount').html(balance);
 }
+
+
 if (AuthUserId) {
     console.info('AuthUserId:', AuthUserId);
     // Enable pusher logging - don't include this in production
@@ -52,5 +54,22 @@ if (AuthUserId) {
             updateBalance(data['payment']['total_amount']);
         }
     });
+
+    // TODO: remove Long Polling Fallback and fix Pusher
+    (function longPollingFallback() {
+        setTimeout(function() {
+            $.ajax({
+                url: "/getTotalAmount",
+                success: function(data) {
+                    if (data['status']) {
+                        //console.info('Long Polling Fallback');
+                        updateBalance(data['total_amount']);
+                    }
+                },
+                dataType: "json",
+                complete: longPollingFallback
+            });
+        }, 1000);
+    })();
 }
 

@@ -19,4 +19,5 @@ Route::auth();
 
 Route::get('/profile', 'UserController@renderProfile');
 Route::post('/chargeAmount', 'UserController@chargeAmount');
+Route::get('/getTotalAmount', 'UserController@getTotalAmount');
 Route::resource('admin/users', 'UsersController'); // ADMIN PANEL
