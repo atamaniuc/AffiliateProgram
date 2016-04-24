@@ -18,3 +18,9 @@ PUSHER_SECRET=5643d0099cb74c93a2c4<br />
 ## credentials
 user: jack@daniels.com <br />
 password: secret
+
+## TODO:
+1. Set up secure chanels for Pusher, use tokens instead of UserID and remove Long Polling Fallback (or use socket.io).<br />
+2. Use UUID instead of incremental ID (was problems with user auth).
+3. Implement User Roles.
+4. Refactor DB to use Nested Sets for getting many referrers.

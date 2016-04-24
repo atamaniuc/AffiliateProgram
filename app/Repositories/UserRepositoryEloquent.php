@@ -46,7 +46,7 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
                 $query
                     ->select('referrer_id')
                     ->from('referrals')
-                    ->whereRaw('referrals.referral_id =' . $id);
+                    ->where('referrals.referral_id', $id);
             })
             ->first();
 

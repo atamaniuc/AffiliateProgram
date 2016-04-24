@@ -34,7 +34,6 @@ function updateBalance(balance) {
 
 
 if (AuthUserId) {
-    console.info('AuthUserId:', AuthUserId);
     // Enable pusher logging - don't include this in production
     Pusher.log = function(message) {
         if (window.console && window.console.log) {
@@ -50,7 +49,7 @@ if (AuthUserId) {
 
     channel.bind('AffiliateProgram\\Events\\UserChargedBalance', function(data) {
         if (data['payment']['total_amount']) {
-            console.info(data.user, data.payment);
+            console.info('Pusher', data.user, data.payment);
             updateBalance(data['payment']['total_amount']);
         }
     });
