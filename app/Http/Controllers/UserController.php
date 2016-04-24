@@ -14,10 +14,10 @@ use AffiliateProgram\Models\Payment;
 use AffiliateProgram\Repositories\UserRepositoryEloquent;
 
 /**
- * Class HomeController
+ * Class UserController
  * @package AffiliateProgram\Http\Controllers
  */
-class HomeController extends Controller
+class UserController extends Controller
 {
     /**
      * @var UserRepositoryEloquent
@@ -40,7 +40,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function renderProfile()
     {
         $user = Auth::user();
 
@@ -53,14 +53,15 @@ class HomeController extends Controller
     }
 
     /**
-     * Charge User Amount
+     * Charge User Amount.
      */
-    public function chargeUserAmount()
+    public function chargeAmount()
     {
         $response = ['status' => false];
 
         if ($user = Auth::user()) {
             $currentAmount = $user->payments()->get()->last() ?: 0;
+            
             if ($currentAmount) {
                 $currentAmount = $currentAmount->total_amount;
             }

@@ -17,8 +17,8 @@ Route::get('/', function () {
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
-Route::post('/chargeUserAmount', 'HomeController@chargeUserAmount');
+Route::get('/profile', 'UserController@renderProfile');
+Route::post('/chargeAmount', 'UserController@chargeAmount');
 Route::resource('admin/users', 'UsersController'); // ADMIN PANEL
 
 /*Route::get('/register', 'AuthController@register');

@@ -2,8 +2,8 @@
 
 namespace AffiliateProgram\Http\Controllers\Auth;
 
-use AffiliateProgram\Repositories\ReferralRepositoryEloquent;
 use AffiliateProgram\Models\User;
+use AffiliateProgram\Models\Referral;
 use AffiliateProgram\Http\Requests;
 use Auth;
 use Illuminate\Http\Request;
@@ -31,25 +31,18 @@ class AuthController extends Controller
     }
 
     /**
-     * @var ReferralRepositoryEloquent
-     */
-    protected $referralRepository;
-
-    /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/profile';
 
     /**
      * AuthController constructor. Create a new authentication controller instance.
-     * @param ReferralRepositoryEloquent $referralRepository
      */
-    public function __construct(ReferralRepositoryEloquent $referralRepository)
+    public function __construct()
     {
         $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-        $this->referralRepository = $referralRepository;
     }
 
     /**
@@ -95,12 +88,16 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $this->throwValidationException($request, $validator);
         }
-
-        $referrerId = \Crypt::decrypt($request->get('referrer_id'));
+        // new User or new Referrer-User
         $user = $this->create($request->all());
-
-        // TODO: check if Referrer still exists !
-        $this->referralRepository->insert($referrerId, $user->id);
+        // if User registered via referral link - create relation in `referrals` table
+        if ($referrerId = $request->get('referrer_id')) {
+            $referrerId = \Crypt::decrypt($referrerId);
+            // check if Referrer still exists
+            if (User::find($referrerId)) {
+                Referral::create(['referrer_id' => $referrerId, 'referral_id' => $user->id]);
+            } 
+        }
 
         Auth::guard($this->getGuard())->login($user);
 

@@ -17,11 +17,11 @@ namespace AffiliateProgram\Models{
  * @property integer $referral_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Referral whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Referral whereReferrerId($value)
- * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Referral whereReferralId($value)
- * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Referral whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Referral whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Referral whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Referral whereReferrerId($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Referral whereReferralId($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Referral whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\AffiliateProgram\Models\Referral whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 	class Referral extends \Eloquent {}

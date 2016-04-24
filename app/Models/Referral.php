@@ -29,6 +29,15 @@ class Referral extends Model
      */
     protected $table = 'referrals';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'referrer_id', 'referral_id',
+    ];
+
     /*public function user1()
     {
         return $this->belongsTo('AffiliateProgram\Models\User', 'referrer_id', 'id');
