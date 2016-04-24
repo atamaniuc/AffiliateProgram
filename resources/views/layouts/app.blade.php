@@ -29,6 +29,11 @@
     <!-- Scripts -->
     <script src="https://js.pusher.com/3.0/pusher.min.js"></script>
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script>
+        @if (Auth::check())
+        var AuthUserId = '{{Auth::user()->id}}';
+        @endif
+    </script>
     {!!HTML::script('js/profile.js')!!}
 </head>
 <body id="app-layout">

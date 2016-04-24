@@ -40,6 +40,6 @@ class UserChargedBalance extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['UserChargedBalance'];
+        return ["UserChargedBalance_{$this->user->id}"];
     }
 }
