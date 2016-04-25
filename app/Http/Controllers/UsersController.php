@@ -6,6 +6,7 @@ use AffiliateProgram\Http\Requests;
 use AffiliateProgram\Http\Controllers\Controller;
 
 use AffiliateProgram\Models\User;
+use AffiliateProgram\Models\Payment as Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
@@ -89,8 +90,9 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        $payment = $user->payments()->get()->last() ?: (object)['total_amount' => '0.00'];
 
-        return view('users.edit', compact('user'));
+        return view('users.edit', compact('user', 'payment'));
     }
 
     /**
@@ -102,9 +104,16 @@ class UsersController extends Controller
      */
     public function update($id, Request $request)
     {
-        
         $user = User::findOrFail($id);
-        $user->update($request->all());
+        $userData = $request->all();
+        $selectedAmount = $userData['amount'];
+        $user->update($userData);
+
+        Payment::create([
+            'total_amount' => $selectedAmount,
+            'amount' => $selectedAmount,
+            'user_id' => $user->id
+        ]);
 
         Session::flash('flash_message', 'User updated!');
 
