@@ -95,7 +95,7 @@ class UserController extends Controller
         if ($user = Auth::user()) {
             $payment = $user->payments()->get()->last() ?: 0;
             setlocale(LC_MONETARY, 'en_US');
-            $response = ['status' => true, 'total_amount' => money_format('%i', $payment->total_amount)];
+            $response = ['status' => true, 'total_amount' => money_format('%i', $payment ? $payment->total_amount : 0)];
         }
         return response()->json($response);
     }
