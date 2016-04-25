@@ -58,8 +58,16 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $newUserData = array_merge($request->all(), ['password' => bcrypt('secret')]);
-        
-        User::create($newUserData);
+        $selectedAmount = $newUserData['amount'];
+
+        $user = User::create($newUserData);
+
+        Payment::create([
+            'total_amount' => $selectedAmount,
+            'amount' => $selectedAmount,
+            'user_id' => $user->id
+        ]);
+
 
         Session::flash('flash_message', 'User added!');
 
@@ -69,7 +77,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      *
      * @return Response
      */
@@ -83,7 +91,7 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      *
      * @return Response
      */
@@ -98,7 +106,7 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param  int $id
      *
      * @return Response
      */
@@ -123,7 +131,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      *
      * @return Response
      */
