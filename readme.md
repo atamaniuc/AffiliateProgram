@@ -7,10 +7,11 @@ This is the two-tier Affiliate Program example written in Laravel 5.2<br />
 
 composer update<br />
 artisan key:generate<br />
+artisan migrate:install<br />
 artisan migrate<br />
 artisan db:seed<br />
 
-Add to .env:<br />
+Set up your .env and add to the end:<br />
 PUSHER_APP_ID=200699<br />
 PUSHER_KEY=e95c6a7f2c5eed28e4a1<br />
 PUSHER_SECRET=5643d0099cb74c93a2c4<br />
