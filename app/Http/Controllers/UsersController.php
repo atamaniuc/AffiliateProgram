@@ -7,6 +7,7 @@ use AffiliateProgram\Http\Controllers\Controller;
 
 use AffiliateProgram\Models\User;
 use AffiliateProgram\Models\Payment as Payment;
+use AffiliateProgram\Repositories\UserRepositoryEloquent;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
@@ -19,13 +20,19 @@ use Session;
 class UsersController extends Controller
 {
     /**
+     * @var UserRepositoryEloquent
+     */
+    protected $userRepository;
+
+    /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param UserRepositoryEloquent $userRepository
      */
-    public function __construct()
+    public function __construct(UserRepositoryEloquent $userRepository)
     {
         $this->middleware('auth');
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -35,7 +42,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(5);
+        $users = $this->userRepository->gerUsersWithLatestPayments();
 
         return view('users.index', compact('users'));
     }

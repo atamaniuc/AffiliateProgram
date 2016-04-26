@@ -74,4 +74,22 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         return $this->parserResult($model);
     }
 
+    /**
+     * @return Collection
+     */
+    public function gerUsersWithLatestPayments()
+    {
+        $this->applyCriteria();
+        $model = $this->model
+            ->crossJoin('payments', 'users.id', '=', 'payments.user_id')
+            ->select('users.*', 'payments.id as pi', \DB::raw('MAX(`payments`.total_amount) as total_amount'))
+            ->groupBy('users.id')
+            ->orderBy('users.id')
+            ->get();
+        
+        $this->resetModel();
+        
+        return $this->parserResult($model);
+    }
+
 }
